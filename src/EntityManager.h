@@ -1,8 +1,12 @@
 #pragma once
 
-#include "Entity.h"
+//#include "Entity.h"
 #include "Component.h"
 #include <vector>
+
+class Entity;
+
+#include "Entity.h"
 
 class EntityManager {
     private:
