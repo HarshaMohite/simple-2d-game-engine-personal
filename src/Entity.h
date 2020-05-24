@@ -26,6 +26,7 @@ class Entity {
         void Render();
         void Destroy();
         bool IsActive() const;
+        void PrintAllComponents();
 
         // Add component to this entity
         template <typename T, typename... TArgs> // Define template

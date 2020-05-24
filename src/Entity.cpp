@@ -1,4 +1,5 @@
 #include "Entity.h"
+#include <iostream>
 
 Entity::Entity(EntityManager& manager): manager(manager) {
     this->isActive = true;
@@ -27,4 +28,11 @@ void Entity::Destroy() {
 
 bool Entity::IsActive() const {
     return this->isActive;
+}
+
+// Prints the name of all components on an indented line
+void Entity::PrintAllComponents() {
+    for (auto& component : this->components) {
+        std::cout << "\t" << component->GetComponentName() << std::endl;
+    }
 }

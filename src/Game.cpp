@@ -47,6 +47,8 @@ void Game::Initialize(int width, int height) {
 
     LoadLevel(0);
 
+    manager.PrintAllEntities();
+
     isRunning = true;
     return;
 }
@@ -54,6 +56,8 @@ void Game::Initialize(int width, int height) {
 void Game::LoadLevel(int levelNumber) {
     Entity& newEntity(manager.AddEntity("projectile"));
     newEntity.AddComponent<TransformComponent>(0, 0, 20, 20, 32, 32, 1);
+    Entity& secondProjectile(manager.AddEntity("projectile2"));
+    secondProjectile.AddComponent<TransformComponent>(255, 255, -20, -20, 32, 32, 1);
 }
 
 // Get input from user and do something here

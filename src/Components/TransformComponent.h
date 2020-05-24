@@ -3,7 +3,7 @@
 #include "../EntityManager.h"
 #include "../../lib/glm/glm.hpp"
 #include <SDL2/SDL.h>
-#include "Game.h"
+#include "../Game.h"
 
 class TransformComponent: public Component {
     public:
@@ -19,6 +19,7 @@ class TransformComponent: public Component {
             this->width = width;
             this->height = height;
             this->scale = scale;
+            this->componentName = "Transform_Component";
         }
 
         void Initialize() override {
