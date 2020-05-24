@@ -2,6 +2,11 @@
 #include "Constants.h"
 #include "Game.h"
 #include "../lib/glm/glm.hpp"
+#include "EntityManager.h"
+#include "./Components/TransformComponent.h"
+
+EntityManager manager;
+SDL_Renderer* Game::renderer;
 
 Game::Game() {
     this->isRunning = false;
@@ -14,16 +19,6 @@ Game::~Game() {
 bool Game::IsRunning() const {
     return this->isRunning;
 }
-
-/*
-float projectilePosX = 0.0f;
-float projectilePosY = 0.0f;
-float projectileVelX = 20.0f;
-float projectileVelY = 30.0f;
-*/
-
-glm::vec2 projectilePos = glm::vec2(0.0f, 0.0f);
-glm::vec2 projectileVel = glm::vec2(20.0f, 20.0f);
 
 // Start up SDL and configure settings.
 void Game::Initialize(int width, int height) {
@@ -50,10 +45,22 @@ void Game::Initialize(int width, int height) {
         std::cerr << "Error creating SDL renderer." << std::endl;
     }
 
+    LoadLevel(0);
+
+    manager.PrintAllEntities();
+
     isRunning = true;
     return;
 }
 
+void Game::LoadLevel(int levelNumber) {
+    Entity& newEntity(manager.AddEntity("projectile"));
+    newEntity.AddComponent<TransformComponent>(0, 0, 20, 20, 32, 32, 1);
+    Entity& secondProjectile(manager.AddEntity("projectile2"));
+    secondProjectile.AddComponent<TransformComponent>(255, 255, -20, -20, 32, 32, 1);
+}
+
+// Get input from user and do something here
 void Game::ProcessInput() {
     SDL_Event event;
     SDL_PollEvent(&event);
@@ -71,10 +78,10 @@ void Game::ProcessInput() {
     }
 }
 
+// Main update function, called from Main.cpp.
+// Propagates to all entities and their components.
+// Handles delay using SDL library. Framerate limited to 60.
 void Game::Update() {
-    // Wait until 16ms has elapsed since the last frame
-    //while (!SDL_TICKS_PASSED(SDL_GetTicks(), ticksLastFrame + FRAME_TARGET_TIME));
-
     // Sleep until next frame ready
     int timeToWait = FRAME_TARGET_TIME - (SDL_GetTicks() - ticksLastFrame);
     if (timeToWait > 0 && timeToWait <= FRAME_TARGET_TIME) {
@@ -90,27 +97,19 @@ void Game::Update() {
     // Sets the new ticks for the current frame to be used in the next pass
     ticksLastFrame = SDL_GetTicks();
 
-    //projectilePosX += projectileVelX * deltaTime;
-    //projectilePosY += projectileVelY * deltaTime;
-    projectilePos = glm::vec2(
-        projectilePos.x + projectileVel.x * deltaTime,
-        projectilePos.y + projectileVel.y * deltaTime
-    );
+    manager.Update(deltaTime);
 }
 
+// Call Render for every entity and component
 void Game::Render() {
     SDL_SetRenderDrawColor(renderer, 21, 21, 21, 255); // Grey
     SDL_RenderClear(renderer); // Clears back buffer
 
-    SDL_Rect projectile {
-        (int) projectilePos.x,
-        (int) projectilePos.y,
-        10,
-        10
-    };
+    if (manager.HasNoEntities()) {
+        return;
+    }
 
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // White
-    SDL_RenderFillRect(renderer, &projectile);
+    manager.Render();
 
     SDL_RenderPresent(renderer);
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "EntityManager.h"
+#include <iostream>
 
 // Destroy all entities
 void EntityManager::ClearData() {
@@ -39,6 +40,16 @@ std::vector<Entity*> EntityManager::GetEntities() const {
     return this->entities;
 }
 
+// Gets the number of entities
 unsigned int EntityManager::GetEntityCount() {
     return this->entities.size();
+}
+
+// Prints the name of all entities
+void EntityManager::PrintAllEntities() {
+    std::cout << "Total Entities: " << GetEntityCount() << std::endl;
+    for (auto& entity : this->entities) {
+        std::cout << entity->name << std::endl;
+        entity->PrintAllComponents();
+    }
 }

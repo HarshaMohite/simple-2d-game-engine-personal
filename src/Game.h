@@ -15,6 +15,7 @@ class Game {
         bool IsRunning() const;
         int ticksLastFrame = 0;
         static SDL_Renderer *renderer;
+        void LoadLevel(int levelNumber);
         void Initialize(int width, int height);
         void ProcessInput();
         void Update();
