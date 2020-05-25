@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <string>
+#include <map>
 #include "Component.h"
 
 // REMOVE LATER
@@ -17,6 +18,7 @@ class Entity {
         EntityManager& manager;
         bool isActive;
         std::vector<Component*> components;
+        std::map<const std::type_info*, Component*> componentTypeMap;
 
     public:
         std::string name;
@@ -34,7 +36,13 @@ class Entity {
             T* newComponent(new T(std::forward<TArgs>(args)...)); //Create new component
             newComponent->owner = this; // Set component's owner to this entity
             components.emplace_back(newComponent); // Add this component to the end of the components vector list
+            componentTypeMap[&typeid(*newComponent)] = newComponent; // Add this component to the componentTypeMap
             newComponent->Initialize(); // Call initialize on that new component
             return *newComponent; // Return the new component
+        }
+
+        template <typename T>
+        T* GetComponent() {
+            return static_cast<T*>(componentTypeMap[&typeid(T)]);
         }
 };
