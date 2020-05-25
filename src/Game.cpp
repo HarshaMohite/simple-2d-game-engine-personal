@@ -1,11 +1,13 @@
 #include <iostream>
-#include "Constants.h"
-#include "Game.h"
+#include "./Constants.h"
+#include "./Game.h"
+#include "./AssetManager.h"
 #include "../lib/glm/glm.hpp"
-#include "EntityManager.h"
+#include "./Components/SpriteComponent.h"
 #include "./Components/TransformComponent.h"
 
 EntityManager manager;
+AssetManager* Game::assetManager = new AssetManager(&manager);
 SDL_Renderer* Game::renderer;
 
 Game::Game() {
@@ -54,10 +56,23 @@ void Game::Initialize(int width, int height) {
 }
 
 void Game::LoadLevel(int levelNumber) {
-    Entity& newEntity(manager.AddEntity("projectile"));
+
+    /*
+    Start including new assets to the assetManager list
+    Start including entities and also components to them
+    */
+
+    std::string textureFilePath = "./assets/images/tank-big-right.png";
+    assetManager->AddTexture("tank-image", textureFilePath.c_str());
+
+    Entity& newEntity(manager.AddEntity("tank"));
+    newEntity.AddComponent<TransformComponent>(0, 0, 20, 20, 32, 32, 1);
+    newEntity.AddComponent<SpriteComponent>("tank-image");
+
+    /*Entity& newEntity(manager.AddEntity("projectile"));
     newEntity.AddComponent<TransformComponent>(0, 0, 20, 20, 32, 32, 1);
     Entity& secondProjectile(manager.AddEntity("projectile2"));
-    secondProjectile.AddComponent<TransformComponent>(255, 255, -20, -20, 32, 32, 1);
+    secondProjectile.AddComponent<TransformComponent>(255, 255, -20, -20, 32, 32, 1);*/
 }
 
 // Get input from user and do something here
