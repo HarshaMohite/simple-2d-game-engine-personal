@@ -5,6 +5,7 @@
 #include "../lib/glm/glm.hpp"
 #include "./Components/SpriteComponent.h"
 #include "./Components/TransformComponent.h"
+#include "./Components/TestComponent.h"
 
 EntityManager manager;
 AssetManager* Game::assetManager = new AssetManager(&manager);
@@ -68,6 +69,8 @@ void Game::LoadLevel(int levelNumber) {
     Entity& newEntity(manager.AddEntity("tank"));
     newEntity.AddComponent<TransformComponent>(0, 0, 20, 20, 32, 32, 1);
     newEntity.AddComponent<SpriteComponent>("tank-image");
+    std::cout << newEntity.HasComponent<SpriteComponent>() << std::endl;
+    std::cout << newEntity.HasComponent<TestComponent>() << std::endl;
 
     /*Entity& newEntity(manager.AddEntity("projectile"));
     newEntity.AddComponent<TransformComponent>(0, 0, 20, 20, 32, 32, 1);

@@ -30,6 +30,18 @@ class Entity {
         bool IsActive() const;
         void PrintAllComponents();
 
+        template <typename T>
+        bool HasComponent() const {
+
+
+            for (auto& component : this->componentTypeMap) {
+                if (component.first == &typeid(T)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         // Add component to this entity
         template <typename T, typename... TArgs> // Define template
         T& AddComponent(TArgs&&... args) { // Take in arguments and return newly created object
