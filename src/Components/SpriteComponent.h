@@ -5,6 +5,13 @@
 #include "../AssetManager.h"
 #include "./TransformComponent.h"
 
+/**
+ * SpriteComponent.h
+ * 
+ * Displays a texture on the screen for the entity.
+ * 
+ */
+
 class SpriteComponent : public Component {
     private:
         TransformComponent* transform;
@@ -17,6 +24,7 @@ class SpriteComponent : public Component {
 
         SpriteComponent(const char* filePath) {
             SetTexture(filePath);
+            this->componentName = "Sprite_Component";
         }
 
         // Sets texture for this sprite component

@@ -2,6 +2,13 @@
 
 #include "../Component.h"
 
+/**
+ * TestComponent.h
+ * 
+ * For testing purposes. Serves no actual purpose.
+ * 
+ */
+
 class TestComponent : public Component {
 
     public:

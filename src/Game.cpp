@@ -1,3 +1,10 @@
+/**
+ * Game.cpp
+ * 
+ * Manages the game loop.
+ * 
+ */
+
 #include <iostream>
 #include "./Constants.h"
 #include "./Game.h"
@@ -71,6 +78,7 @@ void Game::LoadLevel(int levelNumber) {
     newEntity.AddComponent<SpriteComponent>("tank-image");
     std::cout << newEntity.HasComponent<SpriteComponent>() << std::endl;
     std::cout << newEntity.HasComponent<TestComponent>() << std::endl;
+    std::cout << newEntity.HasComponent<TransformComponent>() << std::endl;
 
     /*Entity& newEntity(manager.AddEntity("projectile"));
     newEntity.AddComponent<TransformComponent>(0, 0, 20, 20, 32, 32, 1);

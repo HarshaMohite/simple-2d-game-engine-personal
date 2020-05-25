@@ -33,6 +33,6 @@ bool Entity::IsActive() const {
 // Prints the name of all components on an indented line
 void Entity::PrintAllComponents() {
     for (auto& component : this->components) {
-        std::cout << "\t" << component->GetComponentName() << std::endl;
+        std::cout << "\t-- " << component->GetComponentName() << std::endl;
     }
 }

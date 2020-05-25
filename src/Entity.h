@@ -5,10 +5,6 @@
 #include <map>
 #include "Component.h"
 
-// REMOVE LATER
-//class Component;
-//class EntityManager;
-
 class EntityManager;
 
 #include "EntityManager.h"
@@ -30,16 +26,16 @@ class Entity {
         bool IsActive() const;
         void PrintAllComponents();
 
+        // Returns true if component is found
         template <typename T>
         bool HasComponent() const {
-
-
-            for (auto& component : this->componentTypeMap) {
+            return this->componentTypeMap.count(&typeid(T)); // Much more elegant solution
+            /*for (auto& component : this->componentTypeMap) {
                 if (component.first == &typeid(T)) {
                     return true;
                 }
             }
-            return false;
+            return false;*/
         }
 
         // Add component to this entity

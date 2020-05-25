@@ -1,3 +1,10 @@
+/**
+ * Main.cpp
+ * 
+ * Initiates the game loop.
+ * 
+ */
+
 
 #include <iostream>
 #include "Constants.h"

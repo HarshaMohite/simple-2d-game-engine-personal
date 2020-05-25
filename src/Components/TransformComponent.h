@@ -5,7 +5,14 @@
 #include <SDL2/SDL.h>
 #include "../Game.h"
 
-class TransformComponent: public Component {
+/**
+ * TransformComponent.h
+ * 
+ * Adds transform properties to the entity.
+ * 
+ */
+
+class TransformComponent : public Component {
     public:
         glm::vec2 position;
         glm::vec2 velocity;
