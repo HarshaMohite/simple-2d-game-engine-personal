@@ -13,10 +13,12 @@
 #include "./Components/SpriteComponent.h"
 #include "./Components/TransformComponent.h"
 #include "./Components/TestComponent.h"
+#include "./Components/KeyboardControlComponent.h"
 
 EntityManager manager;
 AssetManager* Game::assetManager = new AssetManager(&manager);
 SDL_Renderer* Game::renderer;
+SDL_Event Game::event;
 
 Game::Game() {
     this->isRunning = false;
@@ -68,15 +70,20 @@ void Game::LoadLevel(int levelNumber) {
 
     assetManager->AddTexture("tank-image", std::string("./assets/images/tank-big-right.png").c_str());
     assetManager->AddTexture("chopper-image", std::string("./assets/images/chopper-spritesheet.png").c_str());
+    assetManager->AddTexture("radar-image", std::string("./assets/images/radar.png").c_str());
+
+    Entity& chopperEntity(manager.AddEntity("chopper"));
+    chopperEntity.AddComponent<TransformComponent>(240, 106, 0, 0, 32, 32, 1);
+    chopperEntity.AddComponent<SpriteComponent>("chopper-image", 2, 90, true, false);
+    chopperEntity.AddComponent<KeyboardControlComponent>("up", "right", "down", "left", "space");
 
     Entity& tankEntity(manager.AddEntity("tank")); // Creates reference to an Entity object called "tankEntity", then sets it to the return of manager.AddEntity("tank")
     tankEntity.AddComponent<TransformComponent>(0, 0, 20, 20, 32, 32, 1);
     tankEntity.AddComponent<SpriteComponent>("tank-image");
 
-    Entity& chopperEntity(manager.AddEntity("chopper"));
-    chopperEntity.AddComponent<TransformComponent>(240, 106, 0, 0, 32, 32, 1);
-    //chopperEntity.AddComponent<SpriteComponent>("chopper-image", 2, 90); // texture, # of frames, animation speed
-    chopperEntity.AddComponent<SpriteComponent>("chopper-image", 2, 90, true, false);
+    Entity& radarEntity(manager.AddEntity("radar"));
+    radarEntity.AddComponent<TransformComponent>(720, 15, 0, 0, 64, 64, 1);
+    radarEntity.AddComponent<SpriteComponent>("radar-image", 8, 150, false, true);
 
 
 
@@ -94,7 +101,6 @@ void Game::LoadLevel(int levelNumber) {
 
 // Get input from user and do something here
 void Game::ProcessInput() {
-    SDL_Event event;
     SDL_PollEvent(&event);
     switch (event.type) {
         case SDL_QUIT:
