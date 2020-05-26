@@ -4,6 +4,7 @@
 #include "../../lib/glm/glm.hpp"
 #include <SDL2/SDL.h>
 #include "../Game.h"
+#include <algorithm>
 
 /**
  * TransformComponent.h
@@ -36,6 +37,20 @@ class TransformComponent : public Component {
         void Update(float deltaTime) override {
             position.x += velocity.x * deltaTime;
             position.y += velocity.y * deltaTime;
+            //position.x = std::clamp(static_cast<int>(position.x), 0, static_cast<int>(WINDOW_WIDTH));
+            //position.y = std::clamp(static_cast<int>(position.y), 0, static_cast<int>(WINDOW_HEIGHT));
+            
+            // Check if outside window bounds, clamp
+            if (position.x < 0.f) {
+                position.x = 0.f;
+            } else if (position.x + static_cast<float>(this->width) > static_cast<float>(WINDOW_WIDTH)) {
+                position.x = static_cast<float>(WINDOW_WIDTH) - static_cast<float>(this->width);
+            }
+            if (position.y < 0.f) {
+                position.y = 0.f;
+            } else if (position.y + static_cast<float>(this->height) > static_cast<float>(WINDOW_HEIGHT)) {
+                position.y =  static_cast<float>(WINDOW_HEIGHT) - static_cast<float>(this->height);
+            }
         }
 
         void Render() override {

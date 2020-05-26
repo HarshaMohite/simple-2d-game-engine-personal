@@ -73,7 +73,8 @@ void Game::LoadLevel(int levelNumber) {
     assetManager->AddTexture("radar-image", std::string("./assets/images/radar.png").c_str());
 
     Entity& chopperEntity(manager.AddEntity("chopper"));
-    chopperEntity.AddComponent<TransformComponent>(240, 106, 0, 0, 32, 32, 1);
+    //chopperEntity.AddComponent<TransformComponent>(240, 106, 0, 0, 32, 32, 1);
+    chopperEntity.AddComponent<TransformComponent>(0, 0, 0, 0, 32, 32, 1);
     chopperEntity.AddComponent<SpriteComponent>("chopper-image", 2, 90, true, false);
     chopperEntity.AddComponent<KeyboardControlComponent>("up", "right", "down", "left", "space");
 

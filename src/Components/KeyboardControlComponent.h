@@ -22,7 +22,7 @@ class KeyboardControlComponent : public Component {
         TransformComponent* transform;
         SpriteComponent* sprite;
         std::string keyboardControlComponentName = "Keyboard_Control_Component";
-        int movementSpeed = 50;
+        int movementSpeed = 150;
 
         KeyboardControlComponent() {
             this->componentName = keyboardControlComponentName;
