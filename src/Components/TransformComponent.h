@@ -5,7 +5,14 @@
 #include <SDL2/SDL.h>
 #include "../Game.h"
 
-class TransformComponent: public Component {
+/**
+ * TransformComponent.h
+ * 
+ * Adds transform properties to the entity.
+ * 
+ */
+
+class TransformComponent : public Component {
     public:
         glm::vec2 position;
         glm::vec2 velocity;
@@ -32,13 +39,13 @@ class TransformComponent: public Component {
         }
 
         void Render() override {
-            SDL_Rect transformRectangle = {
+            /*SDL_Rect transformRectangle = {
                 (int) this->position.x,
                 (int) this->position.y,
                 this->width,
                 this->height
             };
             SDL_SetRenderDrawColor(Game::renderer, 255, 255, 255, 255);
-            SDL_RenderFillRect(Game::renderer, &transformRectangle);
+            SDL_RenderFillRect(Game::renderer, &transformRectangle);*/
         }
 };

@@ -1,11 +1,21 @@
+/**
+ * Game.cpp
+ * 
+ * Manages the game loop.
+ * 
+ */
+
 #include <iostream>
-#include "Constants.h"
-#include "Game.h"
+#include "./Constants.h"
+#include "./Game.h"
+#include "./AssetManager.h"
 #include "../lib/glm/glm.hpp"
-#include "EntityManager.h"
+#include "./Components/SpriteComponent.h"
 #include "./Components/TransformComponent.h"
+#include "./Components/TestComponent.h"
 
 EntityManager manager;
+AssetManager* Game::assetManager = new AssetManager(&manager);
 SDL_Renderer* Game::renderer;
 
 Game::Game() {
@@ -53,11 +63,33 @@ void Game::Initialize(int width, int height) {
     return;
 }
 
+// Loads in all the entities for a level
 void Game::LoadLevel(int levelNumber) {
-    Entity& newEntity(manager.AddEntity("projectile"));
-    newEntity.AddComponent<TransformComponent>(0, 0, 20, 20, 32, 32, 1);
+
+    assetManager->AddTexture("tank-image", std::string("./assets/images/tank-big-right.png").c_str());
+    assetManager->AddTexture("chopper-image", std::string("./assets/images/chopper-spritesheet.png").c_str());
+
+    Entity& tankEntity(manager.AddEntity("tank")); // Creates reference to an Entity object called "tankEntity", then sets it to the return of manager.AddEntity("tank")
+    tankEntity.AddComponent<TransformComponent>(0, 0, 20, 20, 32, 32, 1);
+    tankEntity.AddComponent<SpriteComponent>("tank-image");
+
+    Entity& chopperEntity(manager.AddEntity("chopper"));
+    chopperEntity.AddComponent<TransformComponent>(240, 106, 0, 0, 32, 32, 1);
+    //chopperEntity.AddComponent<SpriteComponent>("chopper-image", 2, 90); // texture, # of frames, animation speed
+    chopperEntity.AddComponent<SpriteComponent>("chopper-image", 2, 90, true, false);
+
+
+
+
+
+    /*std::cout << tankEntity.HasComponent<SpriteComponent>() << std::endl;
+    std::cout << tankEntity.HasComponent<TestComponent>() << std::endl;
+    std::cout << tankEntity.HasComponent<TransformComponent>() << std::endl;*/
+
+    /*Entity& tankEntity(manager.AddEntity("projectile"));
+    tankEntity.AddComponent<TransformComponent>(0, 0, 20, 20, 32, 32, 1);
     Entity& secondProjectile(manager.AddEntity("projectile2"));
-    secondProjectile.AddComponent<TransformComponent>(255, 255, -20, -20, 32, 32, 1);
+    secondProjectile.AddComponent<TransformComponent>(255, 255, -20, -20, 32, 32, 1);*/
 }
 
 // Get input from user and do something here

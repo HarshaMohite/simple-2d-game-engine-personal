@@ -1,3 +1,10 @@
+/**
+ * Entity.cpp
+ * 
+ * Holds all the entities in the game and iterates their properties every frame.
+ * 
+ */
+
 #pragma once
 
 #include "EntityManager.h"
@@ -49,7 +56,7 @@ unsigned int EntityManager::GetEntityCount() {
 void EntityManager::PrintAllEntities() {
     std::cout << "Total Entities: " << GetEntityCount() << std::endl;
     for (auto& entity : this->entities) {
-        std::cout << entity->name << std::endl;
+        std::cout << "> " << entity->name << ":" << std::endl;
         entity->PrintAllComponents();
     }
 }
