@@ -1,7 +1,7 @@
 #pragma once
 
 #include <SDL2/SDL.h>
-#include "../TextureManager.h"
+//#include "../TextureManager.h"
 #include "../AssetManager.h"
 #include "./TransformComponent.h"
 #include "../Animation.h"
