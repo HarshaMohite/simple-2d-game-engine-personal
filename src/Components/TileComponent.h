@@ -14,6 +14,7 @@ class TileComponent : public Component {
 
         TileComponent(int sourceRectX, int sourceRectY, int x, int y, int tileSize, int tileScale, std::string assetTextureId) {
             this->texture = Game::assetManager->GetTexture(assetTextureId);
+            this->componentName = "Tile_Component";
 
             sourceRectangle.x = sourceRectX;
             sourceRectangle.y = sourceRectY;
@@ -34,7 +35,7 @@ class TileComponent : public Component {
         }
 
         void Update(float deltaTime) override {
-            // TODO: take care of the tile positions based on the camera control
+            // Take care of the tile positions based on the camera control
             destinationRectangle.x = position.x - Game::camera.x;
             destinationRectangle.y = position.y - Game::camera.y;
         }
