@@ -6,6 +6,7 @@
 #include "./Entity.h"
 #include "./Component.h"
 #include "./EntityManager.h"
+#include "./Map.h"
 
 class AssetManager;
 
@@ -22,10 +23,13 @@ class Game {
         static SDL_Renderer *renderer;
         static AssetManager* assetManager;
         static SDL_Event event;
+        static SDL_Rect camera;
+        static Map* map;
         void LoadLevel(int levelNumber);
         void Initialize(int width, int height);
         void ProcessInput();
         void Update();
         void Render();
+        void HandleCameraMovement();
         void Destroy();
 };
