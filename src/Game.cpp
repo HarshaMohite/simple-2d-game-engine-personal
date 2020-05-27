@@ -9,6 +9,7 @@
 #include "./Constants.h"
 #include "./Game.h"
 #include "./AssetManager.h"
+#include "./Map.h"
 #include "../lib/glm/glm.hpp"
 #include "./Components/SpriteComponent.h"
 #include "./Components/TransformComponent.h"
@@ -19,6 +20,7 @@ EntityManager manager;
 AssetManager* Game::assetManager = new AssetManager(&manager);
 SDL_Renderer* Game::renderer;
 SDL_Event Game::event;
+Map* map;
 
 Game::Game() {
     this->isRunning = false;
@@ -67,10 +69,13 @@ void Game::Initialize(int width, int height) {
 
 // Loads in all the entities for a level
 void Game::LoadLevel(int levelNumber) {
-
     assetManager->AddTexture("tank-image", std::string("./assets/images/tank-big-right.png").c_str());
     assetManager->AddTexture("chopper-image", std::string("./assets/images/chopper-spritesheet.png").c_str());
     assetManager->AddTexture("radar-image", std::string("./assets/images/radar.png").c_str());
+    assetManager->AddTexture("jungle-tiletexture", std::string("./assets/tilemaps/jungle.png").c_str());
+
+    map = new Map("jungle-tiletexture", 2, 32);
+    map->LoadMap("./assets/tilemaps/jungle.map", 25, 20);
 
     Entity& chopperEntity(manager.AddEntity("chopper"));
     //chopperEntity.AddComponent<TransformComponent>(240, 106, 0, 0, 32, 32, 1);
@@ -85,19 +90,6 @@ void Game::LoadLevel(int levelNumber) {
     Entity& radarEntity(manager.AddEntity("radar"));
     radarEntity.AddComponent<TransformComponent>(720, 15, 0, 0, 64, 64, 1);
     radarEntity.AddComponent<SpriteComponent>("radar-image", 8, 150, false, true);
-
-
-
-
-
-    /*std::cout << tankEntity.HasComponent<SpriteComponent>() << std::endl;
-    std::cout << tankEntity.HasComponent<TestComponent>() << std::endl;
-    std::cout << tankEntity.HasComponent<TransformComponent>() << std::endl;*/
-
-    /*Entity& tankEntity(manager.AddEntity("projectile"));
-    tankEntity.AddComponent<TransformComponent>(0, 0, 20, 20, 32, 32, 1);
-    Entity& secondProjectile(manager.AddEntity("projectile2"));
-    secondProjectile.AddComponent<TransformComponent>(255, 255, -20, -20, 32, 32, 1);*/
 }
 
 // Get input from user and do something here
