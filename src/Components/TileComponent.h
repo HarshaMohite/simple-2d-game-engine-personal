@@ -4,6 +4,7 @@
 #include "../EntityManager.h"
 #include "../AssetManager.h"
 #include "../../lib/glm/glm.hpp"
+#include <iostream>
 
 class TileComponent : public Component {
     public:
@@ -41,6 +42,7 @@ class TileComponent : public Component {
         }
 
         void Render() override {
+            //std::cout << "Rendering tile" << std::endl;
             TextureManager::Draw(texture, sourceRectangle, destinationRectangle, SDL_FLIP_NONE);
         }
 

@@ -31,7 +31,7 @@ class Entity {
         // Returns true if component is found
         template <typename T>
         bool HasComponent() const {
-            return this->componentTypeMap.count(&typeid(T)); // Much more elegant solution
+            return this->componentTypeMap.count(&typeid(T)); // Much more elegant solution. Uses C integer logic of booleans. 0 = false, 1 = true.
             /*for (auto& component : this->componentTypeMap) {
                 if (component.first == &typeid(T)) {
                     return true;

@@ -15,6 +15,7 @@
 #include "./Components/TransformComponent.h"
 #include "./Components/TestComponent.h"
 #include "./Components/KeyboardControlComponent.h"
+#include "./Components/ColliderComponent.h"
 
 
 EntityManager manager;
@@ -63,7 +64,7 @@ void Game::Initialize(int width, int height) {
 
     LoadLevel(0);
 
-    manager.PrintAllEntities();
+    //manager.PrintAllEntities();
 
     isRunning = true;
     return;
@@ -79,6 +80,7 @@ void Game::LoadLevel(int levelNumber) {
     assetManager->AddTexture("chopper-image", std::string("./assets/images/chopper-spritesheet.png").c_str());
     assetManager->AddTexture("radar-image", std::string("./assets/images/radar.png").c_str());
     assetManager->AddTexture("jungle-tiletexture", std::string("./assets/tilemaps/jungle.png").c_str());
+    assetManager->AddTexture("collision-texture", std::string("./assets/images/collision-texture.png").c_str());
 
     map = new Map("jungle-tiletexture", 2, 32);
     map->LoadMap("./assets/tilemaps/jungle.map", 25, 20);
@@ -87,10 +89,13 @@ void Game::LoadLevel(int levelNumber) {
     player.AddComponent<TransformComponent>(0, 0, 0, 0, 32, 32, 1);
     player.AddComponent<SpriteComponent>("chopper-image", 2, 90, true, false);
     player.AddComponent<KeyboardControlComponent>("up", "right", "down", "left", "space");
+    player.AddComponent<ColliderComponent>("player", 240, 106, 32, 32);
+    player.AddComponent<SpriteComponent>("collision-texture");
 
     Entity& tankEntity(manager.AddEntity("tank", ENEMY_LAYER)); // Creates reference to an Entity object called "tankEntity", then sets it to the return of manager.AddEntity("tank")
-    tankEntity.AddComponent<TransformComponent>(0, 0, 20, 20, 32, 32, 1);
+    tankEntity.AddComponent<TransformComponent>(100, 100, 20, 20, 32, 32, 1);
     tankEntity.AddComponent<SpriteComponent>("tank-image");
+    tankEntity.AddComponent<ColliderComponent>("enemy", 100, 100, 32, 32);
 
     Entity& radarEntity(manager.AddEntity("radar", UI_LAYER));
     radarEntity.AddComponent<TransformComponent>(720, 15, 0, 0, 64, 64, 1);
@@ -136,6 +141,7 @@ void Game::Update() {
     manager.Update(deltaTime);
 
     HandleCameraMovement();
+    CheckCollisions();
 }
 
 // Call Render for every entity and component
@@ -165,6 +171,14 @@ void Game::HandleCameraMovement() {
     //camera.y = camera.y > camera.h ? camera.h : camera.y;
     camera.x = camera.x > (WINDOW_WIDTH * map->getScale()) - camera.w ? (WINDOW_WIDTH * map->getScale()) - camera.w : camera.x;
     camera.y = camera.y > (WINDOW_HEIGHT * map->getScale()) - camera.h ? (WINDOW_HEIGHT * map->getScale()) - camera.h : camera.y;
+}
+
+void Game::CheckCollisions() {
+    std::string collisionTagType = manager.CheckEntityCollisions(player);
+    if (collisionTagType.compare("enemy") == 0) { // Hardcoded
+        // TODO: do something when collision is identified with an enemy
+        isRunning = false;
+    }
 }
 
 // Ends processes gracefully
