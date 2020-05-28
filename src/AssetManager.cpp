@@ -6,6 +6,9 @@
  * Stores textures, which need to be in an SDL_Texture object,
  * instanced by the TextureManager.
  * 
+ * This functionality really should've all just been in TextureManager
+ * to eliminate complexity.
+ * 
  */
 
 #include "./AssetManager.h"
