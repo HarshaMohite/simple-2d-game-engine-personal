@@ -12,6 +12,19 @@
 #include "./Components/ColliderComponent.h"
 #include <iostream>
 
+// Logs every entity that has a ColliderComponent
+void EntityManager::LogCollisionEntities() {
+    for (auto& entity : this->entities) {
+        if (entity->HasComponent<ColliderComponent>()) {
+            this->collisionEntities.emplace_back(entity);
+        }
+    }
+    for (auto& entity : this->collisionEntities) {
+        std::cout << "CollisionEntities:" << std::endl;
+        std::cout << "-- " << entity->name << std::endl;
+    }
+}
+
 // Destroy all entities
 void EntityManager::ClearData() {
     for (auto& entity: this->entities) {
@@ -81,6 +94,10 @@ void EntityManager::PrintAllEntities() {
     }
 }
 
+
+// ----- OLD -----
+// Checks ColliderComponent collision of given entity
+// Returns tag of that entity
 std::string EntityManager::CheckEntityCollisions(Entity& myEntity) const {
     ColliderComponent* myCollider = myEntity.GetComponent<ColliderComponent>();
     for (auto& entity : entities) {
@@ -94,4 +111,71 @@ std::string EntityManager::CheckEntityCollisions(Entity& myEntity) const {
         }
     }
     return std::string();
+}
+
+// Tests all entities' ColliderComponent collisions with all other entities
+// Returns the type of collision
+// F*cking horrible code
+/*CollisionType EntityManager::CheckCollisions() const {
+    for (auto& thisEntity : entities) {
+        if (thisEntity->HasComponent<ColliderComponent>()) {
+            ColliderComponent* thisCollider = thisEntity->GetComponent<ColliderComponent>();
+            for (auto& thatEntity : entities) {
+                if (thisEntity->name.compare(thatEntity->name) != 0 && thatEntity->HasComponent<ColliderComponent>()) {
+                    ColliderComponent* thatCollider = thatEntity->GetComponent<ColliderComponent>();
+                    if (Collision::CheckRectangleCollision(thisCollider->collider, thatCollider->collider)) { // Find collision type and return that
+                        if (thisCollider->colliderTag.compare("PLAYER") == 0 &&
+                            thatCollider->colliderTag.compare("ENEMY") == 0) {
+                            return PLAYER_ENEMY_COLLISION;
+                        }
+                        if (thisCollider->colliderTag.compare("PLAYER") == 0 &&
+                            thatCollider->colliderTag.compare("PROJECTILE") == 0) {
+                            return PLAYER_PROJECTILE_COLLISION;
+                        }
+                        if (thisCollider->colliderTag.compare("ENEMY") == 0 &&
+                            thatCollider->colliderTag.compare("FRIENDLY_PROJECTILE") == 0) {
+                            return ENEMY_PROJECTILE_COLLISION;
+                        }
+                        if (thisCollider->colliderTag.compare("PLAYER") == 0 &&
+                            thatCollider->colliderTag.compare("LEVEL_COMPLETE") == 0) {
+                            return PLAYER_LEVEL_COMPLETE_COLLISION;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return NO_COLLISION;
+}*/
+
+// Checks all collisions
+std::vector<CollisionEvent> EntityManager::CheckCollisions() const {
+    std::vector<CollisionEvent> collisionEvents;
+    for (int i = 0; i < collisionEntities.size() - 1; i++) {
+        for (int j = i + 1; j < collisionEntities.size(); j++) {
+            // Check if collider at j and collider at i are colliding (using Collision::CheckRectangleCollision, returns true/false)
+            ColliderComponent* colliderA = collisionEntities[i]->GetComponent<ColliderComponent>();
+            ColliderComponent* colliderB = collisionEntities[j]->GetComponent<ColliderComponent>();
+            if (Collision::CheckRectangleCollision(colliderA->collider, colliderB->collider)) {
+                // If true, find type of collision
+                // If valid collision type, save it and the two colliding entities into collisionEvents
+                std::cout << "Colliding" << std::endl;
+                std::cout << "--- ColliderA: " << collisionEntities[i]->name << ", " << colliderA->colliderTag << std::endl;
+                std::cout << "--- ColliderB: " << collisionEntities[j]->name << ", " << colliderB->colliderTag << std::endl;
+                if (colliderA->colliderTag.compare("PLAYER") == 0 && colliderB->colliderTag.compare("ENEMY") == 0) {
+                    collisionEvents.emplace_back(CollisionEvent{PLAYER_ENEMY_COLLISION, collisionEntities[i], collisionEntities[j]}); // Add to collisionEvents vector
+                }
+                else if (colliderA->colliderTag.compare("PLAYER") == 0 && colliderB->colliderTag.compare("PROJECTILE") == 0) {
+                    collisionEvents.emplace_back(CollisionEvent{PLAYER_PROJECTILE_COLLISION, collisionEntities[i], collisionEntities[j]}); // Add to collisionEvents vector
+                }
+                else if (colliderA->colliderTag.compare("ENEMY") == 0 && colliderB->colliderTag.compare("FRIENDLY_PROJECTILE") == 0) {
+                    collisionEvents.emplace_back(CollisionEvent{ENEMY_PROJECTILE_COLLISION, collisionEntities[i], collisionEntities[j]}); // Add to collisionEvents vector
+                }
+                else if (colliderA->colliderTag.compare("PLAYER") == 0 && colliderB->colliderTag.compare("LEVEL_COMPLETE") == 0) {
+                    collisionEvents.emplace_back(CollisionEvent{PLAYER_LEVEL_COMPLETE_COLLISION, collisionEntities[i], collisionEntities[j]}); // Add to collisionEvents vector
+                }
+            }
+        }
+    }
+    return collisionEvents;
 }

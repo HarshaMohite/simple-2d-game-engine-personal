@@ -27,11 +27,14 @@ class Game {
         static Map* map;
         static bool isDebugging;
         void LoadLevel(int levelNumber);
+        void LogCollisionEntities();
         void Initialize(int width, int height);
         void ProcessInput();
         void Update();
         void Render();
         void HandleCameraMovement();
         void CheckCollisions();
+        void ProcessNextLevel(int levelNumber);
+        void ProcessGameOver();
         void Destroy();
 };

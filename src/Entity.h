@@ -4,11 +4,12 @@
 #include <string>
 #include <map>
 #include "./Component.h"
-#include "./Constants.h"
 
 class EntityManager;
 
 #include "EntityManager.h"
+
+#include "./Constants.h"
 
 class Entity {
     private:

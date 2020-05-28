@@ -2,6 +2,7 @@
 
 #include "Component.h"
 #include <vector>
+#include "Constants.h"
 
 class Entity;
 
@@ -12,6 +13,8 @@ class EntityManager {
         std::vector<Entity*> entities;
     
     public:
+        std::vector<Entity*> collisionEntities;
+        void LogCollisionEntities();
         void ClearData();
         void Update(float deltaTime);
         void Render();
@@ -22,5 +25,7 @@ class EntityManager {
         unsigned int GetEntityCount();
         void PrintAllEntities();
         std::string CheckEntityCollisions(Entity& entity) const;
+        std::vector<CollisionEvent> CheckCollisions() const;
+        //CollisionType CheckCollisions() const;
 
 };
