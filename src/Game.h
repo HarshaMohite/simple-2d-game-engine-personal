@@ -25,6 +25,7 @@ class Game {
         static SDL_Event event;
         static SDL_Rect camera;
         static Map* map;
+        static bool isDebugging;
         void LoadLevel(int levelNumber);
         void Initialize(int width, int height);
         void ProcessInput();

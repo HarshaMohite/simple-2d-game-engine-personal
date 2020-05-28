@@ -56,9 +56,6 @@ class KeyboardControlComponent : public Component {
         }
 
         void Update(float deltaTime) override {
-
-            
-
             if (Game::event.type == SDL_KEYDOWN) {
                 std::string keyCode = std::to_string(Game::event.key.keysym.sym);
                 if (keyCode.compare(upKey) == 0) {

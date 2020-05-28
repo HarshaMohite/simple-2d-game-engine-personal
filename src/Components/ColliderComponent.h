@@ -5,6 +5,7 @@
 #include "../EntityManager.h"
 #include "./TransformComponent.h"
 #include "../AssetManager.h"
+#include <iostream>
 
 class ColliderComponent : public Component {
     public:
@@ -13,11 +14,13 @@ class ColliderComponent : public Component {
         SDL_Rect sourceRectangle;
         SDL_Rect destinationRectangle;
         TransformComponent* transform;
+        SDL_Texture* colliderTexture;
 
         ColliderComponent(std::string colliderTag, int x, int y, int width, int height) {
             this->componentName = "Collider_Component";
             this->colliderTag = colliderTag;
             this->collider = {x, y, width, height};
+            this->colliderTexture = Game::assetManager->GetTexture("collision-image");
         }
 
         void Initialize() override {
@@ -38,6 +41,7 @@ class ColliderComponent : public Component {
         }
 
         void Render() override {
-            //TextureManager::Draw(Game::assetManager->GetTexture("collision-texture"), sourceRectangle, destinationRectangle, SDL_FLIP_NONE);
+            if (Game::isDebugging)
+            TextureManager::Draw(this->colliderTexture, sourceRectangle, destinationRectangle, SDL_FLIP_NONE);
         }
 };

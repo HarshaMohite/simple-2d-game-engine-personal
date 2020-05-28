@@ -42,7 +42,6 @@ class TileComponent : public Component {
         }
 
         void Render() override {
-            //std::cout << "Rendering tile" << std::endl;
             TextureManager::Draw(texture, sourceRectangle, destinationRectangle, SDL_FLIP_NONE);
         }
 

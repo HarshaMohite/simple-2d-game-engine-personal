@@ -37,6 +37,9 @@ void EntityManager::Update(float deltaTime) {
 void EntityManager::Render() {
     for (int layerNumber = 0; layerNumber < NUM_LAYERS; layerNumber++) {
         for (auto& entity : GetEntitiesByLayer(static_cast<LayerType>(layerNumber))) { 
+            if (entity->name != "Tilee") {
+                //std::cout << "Rendering: " << entity->name << std::endl;
+            }
             entity->Render();
         }
     }

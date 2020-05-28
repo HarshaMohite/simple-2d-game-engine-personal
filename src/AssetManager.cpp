@@ -9,6 +9,7 @@
  */
 
 #include "./AssetManager.h"
+#include <iostream>
 
 AssetManager::AssetManager(EntityManager* manager): manager(manager) {}
 
@@ -26,4 +27,11 @@ void AssetManager::AddTexture(std::string textureId, const char* filePath) {
 // Returns texture from asset map
 SDL_Texture* AssetManager::GetTexture(std::string textureId) {
     return textures[textureId];
+}
+
+void AssetManager::PrintMap() {
+    for (auto& texture : this->textures) {
+        std::cout << texture.first << std::endl;
+        std::cout << " ---- " << texture.second << std::endl;
+    }
 }
