@@ -19,10 +19,6 @@ void EntityManager::LogCollisionEntities() {
             this->collisionEntities.emplace_back(entity);
         }
     }
-    for (auto& entity : this->collisionEntities) {
-        std::cout << "CollisionEntities:" << std::endl;
-        std::cout << "-- " << entity->name << std::endl;
-    }
 }
 
 // Destroy all entities
@@ -48,13 +44,21 @@ void EntityManager::Update(float deltaTime) {
 // Has to find the layers every frame, inefficient.
 // Should sort entities into a vector of layers once and then draw from that.
 void EntityManager::Render() {
-    for (int layerNumber = 0; layerNumber < NUM_LAYERS; layerNumber++) {
+    // RESTORE THIS LATER
+    /*for (int layerNumber = 0; layerNumber < NUM_LAYERS; layerNumber++) {
         for (auto& entity : GetEntitiesByLayer(static_cast<LayerType>(layerNumber))) { 
             if (entity->name != "Tilee") {
                 //std::cout << "Rendering: " << entity->name << std::endl;
             }
             entity->Render();
         }
+    }*/
+    
+    //std::cout << this->entities.size() << std::endl;
+    
+    // OLD IMPLEMENTATION for testing purposes
+    for (auto& entity : this->entities) {
+        entity->Render();
     }
 }
 
@@ -94,59 +98,13 @@ void EntityManager::PrintAllEntities() {
     }
 }
 
-
-// ----- OLD -----
-// Checks ColliderComponent collision of given entity
-// Returns tag of that entity
-std::string EntityManager::CheckEntityCollisions(Entity& myEntity) const {
-    ColliderComponent* myCollider = myEntity.GetComponent<ColliderComponent>();
-    for (auto& entity : entities) {
-        if (entity->name.compare(myEntity.name) != 0 && entity->name.compare("Tile") != 0) { // also ignores Tiles
-            if (entity->HasComponent<ColliderComponent>()) {
-                ColliderComponent* otherCollider = entity->GetComponent<ColliderComponent>();
-                if (Collision::CheckRectangleCollision(myCollider->collider, otherCollider->collider)) {
-                    return otherCollider->colliderTag;
-                }
-            }
-        }
+// Prints out all collisionEntities
+void EntityManager::PrintCollisionEntities() {
+    for (auto& entity : this->collisionEntities) {
+        std::cout << "CollisionEntities:" << std::endl;
+        std::cout << "-- " << entity->name << std::endl;
     }
-    return std::string();
 }
-
-// Tests all entities' ColliderComponent collisions with all other entities
-// Returns the type of collision
-// F*cking horrible code
-/*CollisionType EntityManager::CheckCollisions() const {
-    for (auto& thisEntity : entities) {
-        if (thisEntity->HasComponent<ColliderComponent>()) {
-            ColliderComponent* thisCollider = thisEntity->GetComponent<ColliderComponent>();
-            for (auto& thatEntity : entities) {
-                if (thisEntity->name.compare(thatEntity->name) != 0 && thatEntity->HasComponent<ColliderComponent>()) {
-                    ColliderComponent* thatCollider = thatEntity->GetComponent<ColliderComponent>();
-                    if (Collision::CheckRectangleCollision(thisCollider->collider, thatCollider->collider)) { // Find collision type and return that
-                        if (thisCollider->colliderTag.compare("PLAYER") == 0 &&
-                            thatCollider->colliderTag.compare("ENEMY") == 0) {
-                            return PLAYER_ENEMY_COLLISION;
-                        }
-                        if (thisCollider->colliderTag.compare("PLAYER") == 0 &&
-                            thatCollider->colliderTag.compare("PROJECTILE") == 0) {
-                            return PLAYER_PROJECTILE_COLLISION;
-                        }
-                        if (thisCollider->colliderTag.compare("ENEMY") == 0 &&
-                            thatCollider->colliderTag.compare("FRIENDLY_PROJECTILE") == 0) {
-                            return ENEMY_PROJECTILE_COLLISION;
-                        }
-                        if (thisCollider->colliderTag.compare("PLAYER") == 0 &&
-                            thatCollider->colliderTag.compare("LEVEL_COMPLETE") == 0) {
-                            return PLAYER_LEVEL_COMPLETE_COLLISION;
-                        }
-                    }
-                }
-            }
-        }
-    }
-    return NO_COLLISION;
-}*/
 
 // Checks all collisions
 std::vector<CollisionEvent> EntityManager::CheckCollisions() const {
